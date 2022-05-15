@@ -1,11 +1,10 @@
 use std::sync::{Arc, mpsc, Mutex};
-use std::sync::mpsc::Sender;
 use std::thread;
 use std::time::Duration;
 
 use gtk4 as gtk;
 use gtk::prelude::*;
-use gtk4::{Align, Application, ApplicationWindow, DrawingArea, Inhibit, Orientation};
+use gtk4::{Align, Application, ApplicationWindow, Inhibit, Orientation};
 use gtk4::cairo::Context;
 
 use crate::game::{Game, GameStatus, NUM_CELLS};
@@ -19,7 +18,7 @@ enum Signal {
     Clear,
 }
 
-fn build_menu(tx: Sender<Signal>) -> gtk::Box {
+fn build_menu(tx: mpsc::Sender<Signal>) -> gtk::Box {
     let menu_box = gtk::Box::builder()
         .orientation(Orientation::Vertical)
         .halign(Align::Center)
@@ -90,7 +89,7 @@ fn process_signals(signal: Signal, game: &mut Game) {
     }
 }
 
-fn main_loop(game_mutex: Arc<Mutex<Game>>) -> Sender<Signal> {
+fn main_loop(game_mutex: Arc<Mutex<Game>>) -> mpsc::Sender<Signal> {
     let (tx, rx) = mpsc::channel();
     thread::spawn(move || while let Ok(signal) = rx.recv() {
         let mut game = game_mutex.lock().unwrap();
@@ -165,7 +164,7 @@ pub fn build_ui(app: &Application) {
     });
 }
 
-fn draw(_: &DrawingArea, ctx: &Context, game: Arc<Mutex<Game>>, w: i32, h: i32) -> Inhibit {
+fn draw(_: &gtk4::DrawingArea, ctx: &Context, game: Arc<Mutex<Game>>, w: i32, h: i32) -> Inhibit {
     ctx.scale(w as f64, h as f64);
 
     let game = game.lock().unwrap();
