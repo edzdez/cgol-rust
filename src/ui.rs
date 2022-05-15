@@ -22,7 +22,7 @@ fn build_menu(tx: mpsc::Sender<Signal>) -> gtk::Box {
     let menu_box = gtk::Box::builder()
         .orientation(Orientation::Vertical)
         .halign(Align::Center)
-        .margin_top(40)
+        .valign(Align::Center)
         .width_request(210)
         .spacing(20)
         .build();
