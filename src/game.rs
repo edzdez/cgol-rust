@@ -3,6 +3,7 @@ use itertools::Itertools;
 use rand::{Rng, thread_rng};
 
 pub(crate) const NUM_CELLS: i32 = 200;
+// pub(crate) const NUM_CELLS: i32 = 10;
 
 #[derive(Debug, Copy, Clone)]
 pub enum GameStatus {
@@ -42,19 +43,19 @@ impl Game {
     pub fn randomize(&mut self) {
         let mut rng = thread_rng();
 
-        for row in &mut self.grid {
-            for cell in row {
+        self.grid.iter_mut()
+            .flatten()
+            .map(|cell| {
                 *cell = matches!(rng.gen_range(1..=100), 1..=20);
-            }
-        }
+            }).collect_vec();
     }
 
     pub fn clear(&mut self) {
-        for row in &mut self.grid {
-            for cell in row {
-                *cell = false;
-            }
-        }
+        self.grid.iter_mut()
+            .flatten()
+            .map(|cell| {
+                *cell = false
+            }).collect_vec();
     }
 
     fn valid_point(&self, x: i32, y: i32) -> bool {
@@ -95,6 +96,51 @@ impl Game {
         }
 
         self.grid = grid;
+    }
+
+    pub fn create_glider_gun(&mut self) {
+        self.grid[10][10] = true;
+        self.grid[10][11] = true;
+        self.grid[11][10] = true;
+        self.grid[11][11] = true;
+
+        self.grid[8][23] = true;
+        self.grid[8][22] = true;
+        self.grid[9][21] = true;
+        self.grid[10][20] = true;
+        self.grid[11][20] = true;
+        self.grid[12][20] = true;
+        self.grid[13][21] = true;
+        self.grid[14][22] = true;
+        self.grid[14][23] = true;
+
+        self.grid[11][24] = true;
+
+        self.grid[9][25] = true;
+        self.grid[10][26] = true;
+        self.grid[11][26] = true;
+        self.grid[11][27] = true;
+        self.grid[12][26] = true;
+        self.grid[13][25] = true;
+
+        self.grid[10][30] = true;
+        self.grid[9][30] = true;
+        self.grid[8][30] = true;
+        self.grid[10][31] = true;
+        self.grid[9][31] = true;
+        self.grid[8][31] = true;
+        self.grid[7][32] = true;
+        self.grid[11][32] = true;
+
+        self.grid[6][34] = true;
+        self.grid[7][34] = true;
+        self.grid[11][34] = true;
+        self.grid[12][34] = true;
+
+        self.grid[8][44] = true;
+        self.grid[9][44] = true;
+        self.grid[8][45] = true;
+        self.grid[9][45] = true;
     }
 }
 

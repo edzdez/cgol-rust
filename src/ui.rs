@@ -119,7 +119,8 @@ pub fn build_ui(app: &Application) {
 
     {
         let mut game = game.lock().unwrap();
-        game.randomize();
+        // game.randomize();
+        game.create_glider_gun();
     }
 
     let tx = main_loop(game.clone());
