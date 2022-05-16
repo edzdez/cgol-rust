@@ -1,5 +1,3 @@
-extern crate core;
-
 mod ui;
 mod game;
 

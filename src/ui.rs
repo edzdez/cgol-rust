@@ -152,8 +152,8 @@ pub fn build_ui(app: &Application) {
         draw(drawing_area, ctx, game.clone(), w, h);
     });
 
-    main_box.append(&drawing_area);
-    main_box.append(&build_menu(tx));
+    let _ = main_box.append(&drawing_area);
+    let _ = main_box.append(&build_menu(tx));
 
     window.set_child(Some(&main_box));
     window.show();

@@ -66,16 +66,12 @@ impl Game {
     fn count_live_neighbors(&self, row: i32, col: i32) -> usize {
         (-1..=1)
             .cartesian_product(-1..=1)
-            .map(|(dx, dy)| {
+            .filter(|(dx, dy)| {
                 let x = col + dx;
                 let y = row + dy;
 
-                if !(dx == 0 && dy == 0) && self.valid_point(x, y) && self.grid[y as usize][x as usize] {
-                    1usize
-                } else {
-                    0usize
-                }
-            }).sum()
+                !(*dx == 0 && *dy == 0) && self.valid_point(x, y) && self.grid[y as usize][x as usize]
+            }).count()
     }
 
     pub fn step(&mut self) {
@@ -98,6 +94,7 @@ impl Game {
         self.grid = grid;
     }
 
+    // TODO: make a declarative macro do this
     pub fn create_glider_gun(&mut self) {
         self.grid[10][10] = true;
         self.grid[10][11] = true;
