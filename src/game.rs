@@ -57,26 +57,24 @@ impl Game {
         }
     }
 
-    fn count_live_neighbors(&self, row: i32, col: i32) -> usize {
+    fn valid_point(&self, x: i32, y: i32) -> bool {
         let length = self.length;
+        x >= 0 && x < length && y >= 0 && y < length
+    }
 
-        let neighbors = (-1..=1)
+    fn count_live_neighbors(&self, row: i32, col: i32) -> usize {
+        (-1..=1)
             .cartesian_product(-1..=1)
             .map(|(dx, dy)| {
                 let x = col + dx;
                 let y = row + dy;
 
-                if x < 0 || x >= length || y < 0 || y >= length || (x == col && y == row) {
-                    None
-                } else if self.grid[y as usize][x as usize] {
-                    Some((x, y))
+                if !(dx == 0 && dy == 0) && self.valid_point(x, y) && self.grid[y as usize][x as usize] {
+                    1usize
                 } else {
-                    None
+                    0usize
                 }
-            }).filter(|o| matches!(o, Some(_)))
-            .collect_vec();
-
-        neighbors.len()
+            }).sum()
     }
 
     pub fn step(&mut self) {
